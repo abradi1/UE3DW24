@@ -1,82 +1,55 @@
 // Pour l'appeler sur le navigateur nous allons définir une route
+const models = require('../models');
 module.exports = {
     getAllUsers:function(req,res){
         res.status(200).json({"status":200})
-    }
-};
+    },
 
-exports.create = (req,res)=>{
-    const user ={
-        firstname:req.body.firstname,
-        lastname:req.body.lastname
-    }
 
-    models.User.create(user)
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || " Une erreur lors de la création "
-        });
-    })
-}
+     createUser: function (req, res) {
+        models.User.create({ firstname: req.body.firstname, lastname: req.body.lastname }
+        ).then(function (user) {
+        res.status(201).json(user)
+        })
+        },
 
-exports.update =(req,res) => {
+update:function(req,res) {
     const id=req.body.id;
     models.User.update(req.body,{
         where : {id:id}
     })
     .then (num => {
         if(num == 1){
-            res.send({message: "l'utilisateur a été modifié"});
+            res.json({message: "l'utilisateur a été modifié"});
 
         }
-        else{
-            res.send({message:"l'utilisateur n'a pas été modifié"});
-        }
 
-    })
-    .catch (err => {
-        res.status(500).send({
-            message:"erreur de mise a jour"
-        })
-    })
+    });
 
-}
+},
 
-exports.findAll=(req,res)=>{
+findAllUser:function(req,res){
     models.User.findAll().then(
         data => {
-            res.send(data);
+            res.json(data);
         }
     )
-    .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || "une erreure"
-        });
-    })
-}
+    
+},
 
-
-exports.delete=(req,res) =>{
+delete:function(req,res) {
     const id = req.body.id;
-    models.User.delete({
+    models.User.destroy({
         where:{id:id}
     })
     .then(num => {
-        if(num == 1){
-            res.send({
+        if(num == 1)
+            res.json({
                 message:"utilisateur supprimé"
             });
-        }
-        else{
-            res.send({
-                message:"utilisateur non supprimé"
-            });
-        }
-    })
+    });
     
 }
+
+
+};
