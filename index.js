@@ -5,8 +5,21 @@ const app = express();
 const port = process.env.PORT;
 const apiRouter = require('./routes/apiRouter').router;
 const bodyparser = require('body-parser');
+const cors = require('cors');
+
+app.use(cors());
+
 app.use(bodyparser.json());
 
+
+//create a cors middleware
+app.use(function (req, res, next) {
+    //set headers to allow cross origin request.
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 
 app.use('/api/',apiRouter);
